@@ -1,9 +1,20 @@
 FROM php:8.3-fpm-alpine
 
-RUN apk add --no-cache bash git icu-dev libzip-dev libpq-dev oniguruma-dev $PHPIZE_DEPS
+RUN apk add --no-cache \
+    bash \
+    git \
+    unzip \
+    ca-certificates \
+    icu-dev \
+    libzip-dev \
+    zlib-dev \
+    postgresql-dev \
+    oniguruma-dev \
+    openssl \
+    $PHPIZE_DEPS
 
 RUN docker-php-ext-configure intl \
- && docker-php-ext-install -j$(nproc) intl pdo_pgsql bcmath zip opcache
+ && docker-php-ext-install -j"$(nproc)" intl pdo_pgsql bcmath zip opcache
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
